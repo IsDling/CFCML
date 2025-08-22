@@ -58,12 +58,6 @@ class TB_Dataset(Dataset):
             else:
                 source_path = os.path.join(data_path, 'test')
 
-        # if args.run_type=='vis_space':
-        #     if args.ifbalancetest4vis:
-        #         source_path = os.path.join(data_path, 'test4vis')
-        #     elif args.ifminbalancetest4vis:
-        #         source_path = os.path.join(data_path, 'test_minbalance')
-
         patients = []
         labels = []
         t1 = []
@@ -322,25 +316,6 @@ class TB_Dataset(Dataset):
         label = np.array(label)
         return img_out, clinical_data, label, patient
 
-    # def load_data_onlymodal(modal_path, label, patient, subset, test_type, image_type, ifonline_data_aug):
-    #
-    #     img_out = get_image(modal_path)
-    #     if subset == 'train':
-    #         img_out = data_augmentation.online_aug(img_out, image_type, ifonline_data_aug)
-    #     else:
-    #         if test_type == 'voting':
-    #             img_out = data_augmentation.data_aug(img_out, image_type)
-    #         elif test_type == 'ori_aug':
-    #             img_out = gaussian_noise(img_out)
-    #             # img_out = multi_model_Standard(img_out)
-    #             img_out = data_augmentation.online_aug(img_out, image_type, False)
-    #         else: # ori
-    #             # img_out = multi_model_Standard(img_out)
-    #             img_out = data_augmentation.online_aug(img_out, image_type, False)
-    #     label = np.array(label)
-    #
-    #     return img_out, label, patient
-
     def calc_label(self, grade_path_name, labels, num_0, num_1, num_2):
         if grade_path_name == 'Grade_1':
             labels.append(0)
@@ -535,90 +510,3 @@ class TB_Dataset(Dataset):
             return len(self.list_indices_0)*self.args.num_aug
         else:
             return len(self.labels)
-
-
-# class TB_Dataset_onlymodal(Dataset):
-#
-#     def __init__(self, subset, data_path, ifoffline_data_aug, ifbalanceloader, test_type, image_type, num_classes, ifonline_data_aug, val=False, args=False):
-#         super(TB_Dataset_onlymodal, self).__init__()
-#         self.subset = subset
-#         self.test_type = test_type
-#         self.image_type = image_type
-#         self.num_classes = num_classes
-#         self.ifonline_data_aug = ifonline_data_aug
-#         self.args = args
-#
-#         # dataset path
-#         if not val:
-#             if 'train' in subset:
-#                 source_path = os.path.join(data_path, 'train')
-#             elif 'test' in subset:
-#                 source_path = os.path.join(data_path, 'test')
-#             print(source_path)
-#         else:
-#             source_path = os.path.join(data_path, 'test')
-#
-#         patients = []
-#         labels = []
-#
-#         modal = []
-#         num_0 = 0
-#         num_1 = 0
-#         num_2 = 0
-#
-#         for grade_path_name in os.listdir(source_path):
-#             grade_path = os.path.join(source_path, grade_path_name)
-#             for patient_path_name in os.listdir(grade_path):
-#                 patient_path = os.path.join(grade_path, patient_path_name)
-#                 if ifoffline_data_aug:
-#                     for nii_path_name in os.listdir(patient_path):
-#                         if image_type == 'bbox':
-#                             if nii_path_name.startswith(self.args.modal+'_bbox'):
-#                                 modal_path = os.path.join(patient_path, nii_path_name)
-#                                 modal.append(modal_path)
-#                                 patients.append(patient_path_name)
-#
-#                                 labels, num_0, num_1, num_2 = calc_label(grade_path_name, labels, num_0, num_1, num_2)
-#                         else:
-#                             print('wrong type!')
-#                 else:
-#                     if image_type == 'bbox':
-#                         modal_path = os.path.join(patient_path, self.args.modal+'_bbox.nii.gz')
-#                         if os.path.exists(modal_path):
-#                             modal.append(modal_path)
-#                             patients.append(patient_path_name)
-#
-#                             labels, num_0, num_1, num_2 = calc_label(grade_path_name, labels, num_0, num_1, num_2)
-#                         else:
-#                             print('not exist ' + modal_path)
-#
-#         if not ifbalanceloader:
-#             if not val:
-#                 print('Num of all samples:', len(labels))
-#                 print('Num of label 0 (Grade_1):', num_0)
-#                 print('Num of label 1 (Grade_2_invasion):', num_1)
-#                 print('Num of label 2 (Grade_2_noninvasion):', num_2)
-#
-#
-#         self.modal = modal
-#         self.labels = labels
-#         self.patients = patients
-#
-#     def __getitem__(self, index):
-#
-#         img_out, label, patient = load_data_onlymodal(self.modal[index], self.labels[index], self.patients[index], self.subset, self.test_type, self.image_type, self.ifonline_data_aug)
-#         return img_out, label, patient
-#
-#     def __len__(self):
-#         return len(self.labels)
-
-
-if __name__ == '__main__':
-    data_path = '/mnt/hard_disk/liutianling/Invasion/BBox/split/T1+T2+ADC_cv3folder'
-    fold = '3fold'
-    use_path = os.path.join(data_path, fold)
-    batch_size = 32
-    train_set = TB_Dataset('train', use_path, True, False, False, 'bbox', num_classes=2, ifonline_data_aug=False)
-    dataloaders = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=12, drop_last=True)
-    for image, label, patient in dataloaders:
-        print(image.shape)
