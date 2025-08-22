@@ -235,34 +235,11 @@ class TB_Dataset(Dataset):
                                                                      self.labels[self.list_indices_1[index]],
                                                                      self.cases[self.list_indices_1[index]])
 
-            # img_out_2, meta_data_2, label_2, case_2 = self.load_data(self.clinic[self.list_indices_2[index]],
-            #                                                          self.derm[self.list_indices_2[index]],
-            #                                                          self.meta[self.list_indices_2[index]],
-            #                                                          self.labels[self.list_indices_2[index]],
-            #                                                          self.cases[self.list_indices_2[index]])
-            #
-            # img_out_3, meta_data_3, label_3, case_3 = self.load_data(self.clinic[self.list_indices_3[index]],
-            #                                                          self.derm[self.list_indices_3[index]],
-            #                                                          self.meta[self.list_indices_3[index]],
-            #                                                          self.labels[self.list_indices_3[index]],
-            #                                                          self.cases[self.list_indices_3[index]])
-            #
-            # img_out_4, meta_data_4, label_4, case_4 = self.load_data(self.clinic[self.list_indices_4[index]],
-            #                                                          self.derm[self.list_indices_4[index]],
-            #                                                          self.meta[self.list_indices_4[index]],
-            #                                                          self.labels[self.list_indices_4[index]],
-            #                                                          self.cases[self.list_indices_4[index]])
             labels.append(label_0)
             labels.append(label_1)
-            # labels.append(label_2)
-            # labels.append(label_3)
-            # labels.append(label_4)
 
             cases.append(case_0)
             cases.append(case_1)
-            # cases.append(case_2)
-            # cases.append(case_3)
-            # cases.append(case_4)
 
             img_out = np.concatenate((np.expand_dims(img_out_0, axis=0),
                                       np.expand_dims(img_out_1, axis=0)), axis=0)
@@ -286,19 +263,6 @@ class TB_Dataset(Dataset):
                 while index_1_1 == index_1_2:
                     index_1_2 = random.randint(0, len(self.list_indices_1) - 1)
                 img_out_1, meta_data_1, label_1, case_1 = self.load_data_mixup_operation(self.list_indices_1, index_1_1, index_1_2)
-
-            # elif self.args.ifdwp and dwp_value > 0.6:
-            #     img_out_0, meta_data_0, label_0, case_0 = self.load_data(self.clinic[self.list_indices_0[random.randint(0, len(self.list_indices_0) - 1)]],
-            #                                                              self.derm[self.list_indices_0[random.randint(0, len(self.list_indices_0) - 1)]],
-            #                                                              self.meta[self.list_indices_0[random.randint(0, len(self.list_indices_0) - 1)]],
-            #                                                              self.labels[self.list_indices_0[random.randint(0, len(self.list_indices_0) - 1)]],
-            #                                                              self.cases[self.list_indices_0[random.randint(0, len(self.list_indices_0) - 1)]])
-            #
-            #     img_out_1, meta_data_1, label_1, case_1 = self.load_data(self.clinic[self.list_indices_1[random.randint(0, len(self.list_indices_1) - 1)]],
-            #                                                              self.derm[self.list_indices_1[random.randint(0, len(self.list_indices_1) - 1)]],
-            #                                                              self.meta[self.list_indices_1[random.randint(0, len(self.list_indices_1) - 1)]],
-            #                                                              self.labels[self.list_indices_1[random.randint(0, len(self.list_indices_1) - 1)]],
-            #                                                              self.cases[self.list_indices_1[random.randint(0, len(self.list_indices_1) - 1)]])
 
             else:
                 index_0 = random.randint(0, len(self.list_indices_0) - 1)
@@ -338,101 +302,3 @@ class TB_Dataset(Dataset):
             return len(self.list_indices_0)
         else:
             return len(self.labels)
-
-# class TB_Dataset_onlymodal(Dataset):
-#
-#     def __init__(self, subset, data_path, ifoffline_data_aug, ifbalanceloader, test_type, image_type, num_classes, ifonline_aug, val=False, args=False):
-#         super(TB_Dataset_onlymodal, self).__init__()
-#         self.subset = subset
-#         self.test_type = test_type
-#         self.image_type = image_type
-#         self.num_classes = num_classes
-#         self.ifonline_aug = ifonline_aug
-#         self.args = args
-#
-#         # dataset path
-#         if not val:
-#             if 'train' in subset:
-#                 source_path = os.path.join(data_path, 'train')
-#             elif 'test' in subset:
-#                 source_path = os.path.join(data_path, 'test')
-#             print(source_path)
-#         else:
-#             source_path = os.path.join(data_path, 'test')
-#
-#         patients = []
-#         labels = []
-#
-#         modal = []
-#         num_0 = 0
-#         num_1 = 0
-#         num_2 = 0
-#
-#         for grade_path_name in os.listdir(source_path):
-#             grade_path = os.path.join(source_path, grade_path_name)
-#             for patient_path_name in os.listdir(grade_path):
-#                 patient_path = os.path.join(grade_path, patient_path_name)
-#                 if ifoffline_data_aug:
-#                     for nii_path_name in os.listdir(patient_path):
-#                         if image_type == 'bbox':
-#                             if nii_path_name.startswith(self.args.modal+'_bbox'):
-#                                 modal_path = os.path.join(patient_path, nii_path_name)
-#                                 modal.append(modal_path)
-#                                 patients.append(patient_path_name)
-#
-#                                 labels, num_0, num_1, num_2 = calc_label(grade_path_name, labels, num_0, num_1, num_2)
-#                         else:
-#                             print('wrong type!')
-#                 else:
-#                     if image_type == 'bbox':
-#                         modal_path = os.path.join(patient_path, self.args.modal+'_bbox.nii.gz')
-#                         if os.path.exists(modal_path):
-#                             modal.append(modal_path)
-#                             patients.append(patient_path_name)
-#
-#                             labels, num_0, num_1, num_2 = calc_label(grade_path_name, labels, num_0, num_1, num_2)
-#                         else:
-#                             print('not exist ' + modal_path)
-#
-#         if not ifbalanceloader:
-#             if not val:
-#                 print('Num of all samples:', len(labels))
-#                 print('Num of label 0 (Grade_1):', num_0)
-#                 print('Num of label 1 (Grade_2_invasion):', num_1)
-#                 print('Num of label 2 (Grade_2_noninvasion):', num_2)
-#
-#
-#         self.modal = modal
-#         self.labels = labels
-#         self.patients = patients
-#
-#     def __getitem__(self, index):
-#
-#         img_out, label, patient = load_data_onlymodal(self.modal[index], self.labels[index], self.patients[index], self.subset, self.test_type, self.image_type, self.ifonline_aug)
-#         return img_out, label, patient
-#
-#     def __len__(self):
-#         return len(self.labels)
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--ifonline_data_aug', type=int, default=0)
-    parser.add_argument('--ifoffline_data_aug', type=int, default=0)
-    parser.add_argument('--ifbalanceloader3', type=int, default=0)
-    parser.add_argument('--ifbalanceloader4', type=int, default=1)
-    parser.add_argument('--batch_size_derm7pt', type=int, default=10)
-    parser.add_argument('--ifmixup_class', type=int, default=0)
-    parser.add_argument('--mixup_scale', type=float, default=0.9)
-    args = parser.parse_args()
-
-    data_path = '/media/ExtHDD02/ltl/Data/derm7pt/dealt/augmented'
-    meta_path = '/media/ExtHDD02/ltl/Data/derm7pt/release_v0/meta/meta.csv'
-    batch_size = 64
-
-    train_set = TB_Dataset('train', data_path, meta_path, args)
-    dataloaders = DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=12, drop_last=True)
-    for image, meta_data, label, case in dataloaders:
-        print(meta_data)
-        print(label)
-        print(image.shape)
