@@ -798,15 +798,15 @@ def test(weight_path, num_classes, weight_date):
 def find_saveinfsFortest():
     if args.dataset_name == 'men':
         if args.method_name == 'CFCML':
-            save_infs = [['2025-02-18-10_17-48.293454', '1fold'],
-                         ['2025-03-05-05_00-42.182566', '2fold'],
-                         ['2025-02-25-23_17-42.180926', '3fold']]
+            save_infs = [['', '1fold'],
+                         ['', '2fold'],
+                         ['', '3fold']]
 
     elif args.dataset_name == 'derm7pt':
         if args.method_name == 'CFCML':
-            save_infs = [['2025-02-24-23_45-26.262602'],
-                         ['2025-03-04-00_55-22.587678'],
-                         ['2025-03-04-02_34-43.320882']]
+            save_infs = [[''],
+                         [''],
+                         ['']]
     return save_infs
 
 
@@ -815,11 +815,11 @@ if __name__ == '__main__':
     test_result_path = '../weights/result_{}.csv'.format(args.dataset_name)
 
     if args.dataset_name == 'men':
-        data_path = '/media/ltl/Data/MEN/{}/cv3folders_multicls'.format(str(args.img_size_men))
-        clinical_path = '796_dataInf.csv'
+        data_path = ''
+        clinical_path = ''
     elif args.dataset_name == 'derm7pt':
-        data_path = '/media/ltl/Data/derm7pt/dealt/augmented'
-        clinical_path = '/media/ExtHDD02/ltl/Data/derm7pt/release_v0/meta/meta.csv'
+        data_path = ''
+        clinical_path = ''
 
     print('start time:', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
 
@@ -874,4 +874,5 @@ if __name__ == '__main__':
     else:
         print('Wrong run_type!')
     print('\nend time:', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+
 
