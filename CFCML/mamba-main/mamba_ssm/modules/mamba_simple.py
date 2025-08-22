@@ -1,12 +1,4 @@
 # Copyright (c) 2023, Tri Dao, Albert Gu.
-#163
-# cp -rf mamba-1p1p1/mamba_ssm/modules/mamba_simple.py /home/liutianling/anaconda3/envs/mamba/lib/python3.10/site-packages/mamba_ssm/modules/mamba_simple.py
-
-#149
-# mamba
-# cp -rf mamba-main/mamba_ssm/modules/mamba_simple.py /home/ltl/anaconda3/envs/mamba/lib/python3.10/site-packages/mamba_ssm/modules/mamba_simple.py
-# mamba1
-# cp -rf mamba-main/mamba_ssm/modules/mamba_simple.py /home/ltl/anaconda3/envs/mamba1/lib/python3.10/site-packages/mamba_ssm/modules/mamba_simple.py
 
 import math
 from typing import Optional
@@ -2359,3 +2351,4 @@ class Block(nn.Module):
 
     def allocate_inference_cache(self, batch_size, max_seqlen, dtype=None, **kwargs):
         return self.mixer.allocate_inference_cache(batch_size, max_seqlen, dtype=dtype, **kwargs)
+
