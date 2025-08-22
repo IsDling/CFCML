@@ -1,10 +1,5 @@
 # Copyright (c) 2023, Tri Dao, Albert Gu.
 # 每次更改这个文件都要把这个文件
-#163
-# cp -rf mamba-1p1p1/mamba_ssm/modules/mamba_simple.py /home/liutianling/anaconda3/envs/mamba/lib/python3.10/site-packages/mamba_ssm/modules/mamba_simple.py
-
-#149
-# cp -rf mamba-main/mamba_ssm/modules/mamba_simple.py /home/ltl/anaconda3/envs/mamba/lib/python3.10/site-packages/mamba_ssm/modules/mamba_simple.py
 import math
 from typing import Optional
 
